@@ -9,30 +9,30 @@ There is no CI pipeline. There's no GitHub Actions workflow in this repo — bui
 ```mermaid
 flowchart TD
     subgraph Local
-        TF[Terraform: main.tf / variables.tf / provider.tf]
-        DOCKERFILE[Dockerfile]
-        SCRIPTS[deploy_and_train.sh + scripts/*.sh]
+        TF["Terraform: main.tf, variables.tf, provider.tf"]
+        DOCKERFILE["Dockerfile"]
+        SCRIPTS["deploy_and_train.sh + scripts/*.sh"]
     end
 
     subgraph AWS["AWS eu-west-1"]
-        IAM[IAM Role: SageMakerExecutionRole]
-        S3[(S3 bucket: sagemaker-mnist-data-*)]
-        ECR[ECR repo: sagemaker-pytorch-mnist]
-        NB[SageMaker Notebook: ml.t2.medium]
-        XGB[SageMaker Training Job: built-in XGBoost container, ml.m5.large]
-        PT[SageMaker Training Job: custom PyTorch container, ml.m5.large]
+        IAM["IAM Role: SageMakerExecutionRole"]
+        S3[("S3 bucket: sagemaker-mnist-data-*")]
+        ECR["ECR repo: sagemaker-pytorch-mnist"]
+        NB["SageMaker Notebook: ml.t2.medium"]
+        XGB["SageMaker Training Job: built-in XGBoost container, ml.m5.large"]
+        PT["SageMaker Training Job: custom PyTorch container, ml.m5.large"]
     end
 
-    TF -->|apply| IAM
-    TF -->|apply| S3
-    TF -->|apply| ECR
-    TF -->|apply| NB
+    TF -->|"apply"| IAM
+    TF -->|"apply"| S3
+    TF -->|"apply"| ECR
+    TF -->|"apply"| NB
 
-    DOCKERFILE -->|build_and_push_docker.sh| ECR
+    DOCKERFILE -->|"build_and_push_docker.sh"| ECR
 
-    SCRIPTS -->|prepare_data.sh: download MNIST, upload train/test npy| S3
-    SCRIPTS -->|train_models.sh: launch XGBoost estimator| XGB
-    SCRIPTS -->|train_models.sh: launch PyTorch estimator| PT
+    SCRIPTS -->|"prepare_data.sh: download MNIST, upload train/test npy"| S3
+    SCRIPTS -->|"train_models.sh: launch XGBoost estimator"| XGB
+    SCRIPTS -->|"train_models.sh: launch PyTorch estimator"| PT
 
     S3 -->|train/validation channels| XGB
     S3 -->|training channel| PT
