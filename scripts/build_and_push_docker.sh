@@ -8,7 +8,7 @@ ECR_URI=$(terraform output -raw ecr_repository_uri)
 echo "Using ECR repository: $ECR_URI"
 
 # Get AWS account ID and region
- j``ACCOUNT_ID=$(aws sts get-caller-identity --profile raj-private --query Account --output text)
+ACCOUNT_ID=$(aws sts get-caller-identity --profile raj-private --query Account --output text)
 REGION="eu-west-1"
 
 # Authenticate Docker to ECR
